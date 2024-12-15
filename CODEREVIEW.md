@@ -95,7 +95,7 @@ In my case I had to:
 
 ```bash
 # Current
-const state = useSelector((state) => state)
+const state = useSelector(state => state)
 const { movies } = state
 
 # Improvement
