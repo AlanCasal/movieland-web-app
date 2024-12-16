@@ -9,6 +9,10 @@ React + Redux + RTK + Bootstrap application that fetches movies from [https://ww
 
 Created with [Create React App](https://github.com/facebook/create-react-app).
 
+### Pre-requisites
+- node v16
+- Known issues with Python 3.12.6. Suggested Python version: 3.11
+
 ### Available Scripts
 
 In the project directory, you can run:

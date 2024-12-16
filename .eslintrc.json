@@ -1,0 +1,108 @@
+{
+	"root": true,
+	"parser": "@babel/eslint-parser",
+	"extends": [
+		"react-app",
+		"react-app/jest",
+		"eslint:recommended",
+		"plugin:react/recommended",
+		"plugin:import/recommended",
+		"airbnb-base",
+		"plugin:prettier/recommended",
+		"prettier"
+	],
+	"env": {
+		"browser": true,
+		"node": true,
+		"es6": true,
+		"jest": true
+	},
+	"parserOptions": {
+		"ecmaVersion": 2020,
+		"sourceType": "module",
+		"ecmaFeatures": {
+			"jsx": true,
+			"arrowFunctions": true
+		}
+	},
+	"plugins": ["react", "prettier", "import"],
+	"settings": {
+		"react": {
+			"version": "detect"
+		},
+		"import/resolver": {
+			"node": {
+				"extensions": [".js", ".jsx"],
+				"paths": ["./src", "./scripts"]
+			}
+		},
+		"import/ignore": ["node_modules/react-native/index\\.js$"]
+	},
+	"rules": {
+		"no-restricted-exports": ["off"],
+		"react/react-in-jsx-scope": "off",
+		"no-unused-vars": "warn",
+		"no-use-before-define": "warn",
+		"import/no-named-as-default": "off",
+		"import/prefer-default-export": "off",
+		"no-console": "warn",
+		"no-constant-condition": "warn",
+		"no-extra-boolean-cast": "warn",
+		"no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+		"object-curly-spacing": ["warn", "always"],
+		"prettier/prettier": [
+			"error",
+			{
+				"endOfLine": "auto",
+				"singleQuote": true,
+				"printWidth": 80
+			}
+		],
+		"import/order": [
+			"error",
+			{
+				"groups": [
+					"builtin",
+					"external",
+					"internal",
+					"parent",
+					"sibling",
+					"index"
+				],
+				"alphabetize": {
+					"order": "asc",
+					"caseInsensitive": true
+				}
+			}
+		],
+		"react/display-name": "off",
+		"react/jsx-boolean-value": "off",
+		"react/jsx-closing-bracket-location": "off",
+		"react/jsx-key": "error",
+		"react/jsx-one-expression-per-line": "off",
+		"react/jsx-props-no-spreading": "off",
+		"react/jsx-wrap-multilines": "off",
+		"react/no-unescaped-entities": "off",
+		"react/prop-types": "off",
+		"react/require-default-props": "off",
+		"import/extensions": [
+			"error",
+			"ignorePackages",
+			{
+				"": "never",
+				"js": "never",
+				"jsx": "never"
+			}
+		],
+		"import/no-cycle": "error",
+		"quotes": ["error", "single", { "avoidEscape": true }],
+		"indent": ["error", "tab"]
+	},
+	"ignorePatterns": [
+		"toDos.js",
+		"metro.config.js",
+		"babel.config.js",
+		"challenge.js",
+		"todo-app.code-workspace"
+	]
+}
