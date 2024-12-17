@@ -3,21 +3,24 @@
 ## TASKS
 
 > #### As a User, I can search for movies and view a list of results
+>
 > - searchbar is updating URL but it's not finding any results
 
 > #### As a User, I can add and remove movies from a “my favourites” list
+>
 > - since searchbar is not finding any movie, I can't star any movie
 
 > #### As a User, I can add and remove movies I want to watch, like the “watch later” functionality on YouTube.
+>
 > - since searchbar is not finding any movie, 'watch later' is always empty
 
 ## GENERAL SUGGESTIONS
 
 - use of propTypes could be useful although it's deprecated, consider using TypeScript or Flow for type safety
 
-- add `linter` and `prettier` for code consistency, formatting, style, indentation, etc.
+- add `linter` and `prettier` for code consistency, formatting, style, indentation, etc
 
-- should leave this file an app container, and move the content to a Home screen component or feature. Same for other screens
+- should leave this file an app container, and move the content to a Home screen component or feature Same for other screens
 
 - consider using BEM methodology for naming classes for better readability and maintainability
 
@@ -31,10 +34,10 @@
 
 - Could change `App.js` to `App.jsx` since it contains JSX code and is a React component
 
-
 ## [package.json](/package.json)
 
 Consider adding suuport to IE11 if needed
+
 ```bash
 {
   # ...rest of the code...
@@ -47,11 +50,10 @@ Consider adding suuport to IE11 if needed
 }
 ```
 
-
 ## [manifest.json](/public/manifest.json)
 
+- [(line 2)](/public/manifest.json#L2) Rename app to something more meaningful
 
-(line 2) Rename app to something more meaningful
 ```bash
 # Current
 "short_name": "React App",
@@ -80,18 +82,19 @@ Consider adding suuport to IE11 if needed
 
 add pre requirements in `README.md` since app won't work with newer `Node` versions, nor `Python v3.12+`
 In my case I had to:
+
 - switch to node v16
 - I was using python3 -V -> Python 3.12.6 and I was getting error, so I used python3.11
 - brew install python@3.11
 - npm config set python /opt/homebrew/opt/python@3.11/bin/python3.11
 
 ## [App.js](/src/App.js)
-  
+
 - should split code and use maybe a custom hook for movies and trailer, or a utils file for cleaner code
 
-- (line 4) is `import 'reactjs-popup/dist/index.css';` being actually used?
+- [(line 4)](src/App.js#L4) is `import 'reactjs-popup/dist/index.css';` being actually used?
 
-- (line 15) current selector is getting the entire state when only movies is being used
+- [(line 15)](/src/App.js#L15) current selector is getting the entire state when only movies is being used
 
 ```bash
 # Current
@@ -102,17 +105,38 @@ const { movies } = state
 const movies = useSelector((state) => state.movies)
 ```
 
-- (line 21) `isOpen` is assigned a value but never used. Either implement it or remove it.
+- [(line 21)](/src/App.js#L21) `isOpen` is assigned a value but never used. Either implement it or remove it
 
-- (line 24) `closeModal` is assigned but never used. Either implement it or remove it.
+- [(line 24)](/src/App.js#L24) `closeModal` is assigned but never used. Either implement it or remove it
 
-- (line 27) `closeCard` functions is empty
+- [(line 26)](/src/App.js#L26) `closeCard` functions is empty
 
-- (line 33) should add a debounce for better performance
+- [(line 30)](/src/App.js#L30)
+  - consider adding a debounce to prevent too many fetch requests
+  - consider using only template literals for consistency
 
-- (line 38) should add a debounce to prevent too many requests
+```bash
+# Current
+dispatch(fetchMovies(`${ENDPOINT_SEARCH}&query=` + query));
 
-- (lines 43 and 71) Could be improved by
+# Improvement
+dispatch(fetchMovies(`${ENDPOINT_SEARCH}&query=${query}`));
+```
+
+- [(line 39)](/src/App.js#L39) no need of `navigate('/');` here since [Header.jsx](/src/components/Header.jsx#L12) is using `to="/"` in `<Link to="/" data-testid="home" onClick={() => searchMovies('')}>`
+
+- [(line 43)](/src/App.js#L43) and [(line 71)](/src/App.js#L71) Could be improved by
+
+- [(line 44)](/src/App.js#L44) consider a refactor like
+
+```bash
+const apiUrl = searchQuery
+  ? `${ENDPOINT_SEARCH}&query=${searchQuery}`
+  : ENDPOINT_DISCOVER;
+
+dispatch(fetchMovies(apiUrl));
+```
+
 ```bash
 # Current
 useEffect(() => {
@@ -132,16 +156,16 @@ useEffect(() => {
   getMovies();
 }, [getMovies]);
 
-# Memoization: useCallback will memoize the getMovies function and only recreate it when its dependencies (searchQuery or dispatch) change.
-# Explicit Dependencies: It makes the dependencies more explicit and easier to track. The effect depends on getMovies, which in turn depends on searchQuery and dispatch.
-# ESLint Compliance: This approach satisfies the exhaustive-deps ESLint rule without creating any potential issues.
+# Memoization: useCallback will memoize the getMovies function and only recreate it when its dependencies (searchQuery or dispatch) change
+# Explicit Dependencies: It makes the dependencies more explicit and easier to track. The effect depends on getMovies, which in turn depends on searchQuery and dispatch
+# ESLint Compliance: This approach satisfies the exhaustive-deps ESLint rule without creating any potential issues
 # Predictable Behavior: The effect will run when either:
 #  - The component mounts
 #  - searchQuery changes
 #  - dispatch changes (which shouldn't happen as Redux's dispatch is stable)
 ```
 
-- (line 51) The conditional check if (!videoKey) is redundant since setOpen(true) is called regardless.
+- [(line 51)](/src/App.js#L51) The conditional check if (!videoKey) is redundant since setOpen(true) is called regardless
 
 ```bash
 # Current
@@ -167,18 +191,23 @@ const viewTrailer = (movie) => {
 };
 ```
 
-- (line 58) Missing error handling for the fetch request. Should use try/catch.
+- [(line 58)](/src/App.js#L58) Missing error handling for the fetch request. Consider using try/catch
 
-- (line 61) should use try/catch 
+- [(line 61)](/src/App.js#L61) consider using try/catch.
 
-- (line 63, 64, 65) should use optional chaining for safer access to data and can also use destructuring
+  - Also response.json(); returns a promise so it would need an `await`. The same applies in [Movie.jsx](/src/components/Movie.jsx#L35) and [moviesSlice.js](/src/data/moviesSlice.js#L5)
+  - `response.json()` method is asynchronous. Parsing JSON can be computationally expensive for large payloads, and doing it synchronously could block the main thread. That's why the Fetch API was designed to handle this asynchronously.
 
+- [(line 63)](/src/App.js#L63), [(line 64)](/src/App.js#L64), [(line 65)](/src/App.js#L65) should use optional chaining for safer access to data and can also use destructuring
+
+- [(line 75)](/src/App.js#L75) `searchParams={searchParams}` and `setSearchParams={setSearchParams}` params are sent to `Header` but are not used
 
 ## [app.scss](/src/app.scss)
 
-- (line 1) Using both ID and class selectors. Consider using consistent class selectors
+- [(line 1)](/src/app.scss#L1) Using both ID and class selectors. Consider using consistent class selectors
 
 - Consider using CSS variables for potentially reusable values
+
 ```bash
 # Current
 #root {
@@ -229,11 +258,12 @@ const viewTrailer = (movie) => {
 }
 ```
 
-- (line 31, 32, 33 and 35) no need to add vendor prefixes lines
+- [(line 31)](/src/app.scss#L31), [(line 32)](/src/app.scss#L32), [(line 33)](/src/app.scss#L33) and [(line 35)](/src/app.scss#L35) no need to add vendor prefixes lines
 - Create React App uses PostCSS and autoprefixer, and package.json already has the browserslist
 - so css support for browsers is already handled
 
-- (line 38) Consider using `rem` units instead of `px` for better accessibility
+- [(line 38)](/src/app.scss#L38) Consider using `rem` units for better accessibility
+
 ```bash
 .video-player {
   height: 60vw; // Consider adding min/max height constraints
@@ -256,19 +286,21 @@ height: 3.75rem; # Scales with user's font size preferences
 ```
 
 - Consider splitting code and using
-  - `_variables.scss` file for variables,
-  - `_base.scss` for resets and _mixins.scss for mixins,
+  - `_variables.scss` file for variables
+  - `_base.scss` for resets and \_mixins.scss for mixins
   - `_animations.scss` for animations,
   - `_main.scss` that imports all others
 
 ## [constants.js](/src/constants.js)
 
-- (line 1) API_KEY is exposed, should be in .env file and accessed via process.env.API_KEY
+- [(line 1)](/src/constants.js#L1) API*KEY is exposed, should be in .env file and accessed via process.env.API_KEY (make sure to start the name with `REACT_APP*`REST_OF_THE_NAME)
+
 ```bash
 export const TMDB_API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 ```
 
-- (line 2) consider following a better naming convention for the variables
+- [(line 2)](/src/constants.js#L2) consider following a better naming convention for the variables
+
 ```bash
 export const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
@@ -279,14 +311,14 @@ export const TMDB_ENDPOINTS = {
 };
 ```
 
-- (line 3 and 4) Forward slash before the question mark is incorrect. Query parameters should be separated from the path using a `?`, not `/?`
+- [(line 3)](/src/constants.js#L3) and [(line 4)](/src/constants.js#L4) Forward slash before the question mark is incorrect. Query parameters should be separated from the path using a `?`, not `/?`
 
-- (line 5) hardcoded movie id, should be dynamic
-
+- [(line 5)](/src/constants.js#L5) hardcoded movie id, should be dynamic
 
 ## [index.css](/src/index.css)
 
 - Consider adding a box-sizing property to ensure consistent sizing across elements:
+
 ```bash
 body {
   margin: 0;
@@ -300,6 +332,7 @@ body {
 ```
 
 - consider adding a default text color and background color to ensure consistent rendering across different browsers:
+
 ```bash
 body {
   # ...rest of the code...
@@ -309,6 +342,7 @@ body {
 ```
 
 - Consider adding a line-height property to improve text readability:
+
 ```bash
 body {
   # ...rest of the code...
@@ -316,7 +350,8 @@ body {
 }
 ```
 
-- (line 11) Consider adding some basic styling to make code snippets stand out better:
+- [(line 11)](/src/index.css#L11) Consider adding some basic styling to make code snippets stand out better:
+
 ```bash
 # ...rest of the code...
 code {
@@ -329,29 +364,31 @@ code {
 
 - Consider splitting code and using (also mentioned in app.scss)
   - `_variables.scss` file for variables,
-  - `_base.scss` for resets and _mixins.scss for mixins,
+  - `_base.scss` for resets and \_mixins.scss for mixins,
   - `_animations.scss` for animations,
   - `_main.scss` that imports all others
   - delete `index.css` and `app.scss`. This approach is more scalable and maintainable and follows SCSS best practices
 
 ## [Header.jsx](/src/components/Header.jsx)
 
-- (line 33) input should use onChange instead of onKeyUp
-  - better accessibility, it works for all input methods.
+- [(line 33)](/src/components/Header.jsx#L33) input should use onChange instead of onKeyUp
+
+  - better accessibility, it works for all input methods
   - it won't miss any input change since it trogger whenever the input changes
 
 - add aria-label to nav elements for better accessibility
 
 - some classes like visually-hidden or rounded are not used anywhere. If they are from bootstrap, they should be removed
 
-- (line 10) header should have a className to be used in scss. 
-- header is too generic and may conflict with other headers
-- header has lower specificity than a class selector
-- using a className will make it easier to style and target the header and maintain it
+- [(line 11)](/src/components/Header.jsx#L11) header should have a className to be used in scss
+  - header is too generic and may conflict with other headers
+  - header has lower specificity than a class selector
+  - using a className will make it easier to style and target the header and maintain it
 
 ## [header.scss](/src/styles/header.scss)
 
 - instead of using element selectors like `header`, `input`, `button`, consider using a class selectors
+
   - it will make it easier to style and target the elements and maintain it
   - it will make the code more readable and easier to understand
   - avoids unintentional side effects when using element selectors
@@ -359,19 +396,20 @@ code {
 
 - consider use variables for reusable values. I.E. `$color-white: #fff;` and moved them to `_variables.scss`
 
-- (lines 13, 38, 79) consider using flexbox instead of floats for better layout control
+- [(line 13)](/src/styles/header.scss#L13), [(line 38)](/src/styles/header.scss#L38), [(line 79)](/src/styles/header.scss#L79) consider using flexbox instead of floats for better layout control
 
-- (line 58) consider using gap instead of margin for better spacing control
+- [(line 58)](/src/styles/header.scss#L58) consider using gap instead of margin for better spacing control
 
-- (lines 2, 3) consider avoiding the use of unnecessary `position: fixed` and `z-index`
-
+- [(line 2)](/src/styles/header.scss#L2), [(line 3)](/src/styles/header.scss#L3) consider avoiding the use of unnecessary `position: fixed` and `z-index`
 
 ## [Movie.jsx](/src/components/Movie.jsx)
+
 - some classes suggest bootstrap usage but requirements mention 'that Bootstrap is not allowed'
 
-- (line 6) closeCard is not being used, should be removed
+- [(line 6)](/src/components/Movie.jsx#L6) closeCard is not being used, should be removed
 
-- (line 16) should use better code readability and maintainability
+- [(line 16)](/src/components/Movie.jsx#L16) should use better code readability and maintainability
+
 ```bash
 # Current
 const myClickHandler = (e) => {
@@ -388,27 +426,29 @@ const handleClose = (e) => {
 }
 ```
 
-- (line 30 and 47) map could be refactored to constant and maybe even memoized
+- [(line 30)](/src/components/Movie.jsx#L30) and [(line 47)](/src/components/Movie.jsx#L47) map could be refactored to constant and maybe even memoized and maybe even memoized
+
 ```bash
 # Improvement:
 const isStarred = starred.starredMovies.map(movie => movie.id).includes(movie.id)
 const isWatchLater = watchLater.watchLaterMovies.map(movie => movie.id).includes(movie.id)
 
 # Improvement with memoization:
-const isStarred = useMemo(() => 
+const isStarred = useMemo(() =>
   starred.starredMovies.map(m => m.id).includes(movie.id),
   [starred.starredMovies, movie.id]
 )
 
-const isWatchLater = useMemo(() => 
+const isWatchLater = useMemo(() =>
   watchLater.watchLaterMovies.map(m => m.id).includes(movie.id),
   [watchLater.watchLaterMovies, movie.id]
-) 
+)
 ```
 
-- (line 31, 43) consider using button elements instead of span for better accessibility
+- [(line 31)](/src/components/Movie.jsx#L31), [(line 43)](/src/components/Movie.jsx#L43) consider using button elements instead of span for better accessibility
 
-- (line 32 and 48) should use a map helper like:
+- [(line 32)](/src/components/Movie.jsx#L32) and [(line 48)](/src/components/Movie.jsx#L48) should use a map helper
+
 ```bash
 # Improvement:
 dispatch(starMovie(formattedMovieData(movie)))
@@ -421,18 +461,18 @@ const formattedMovieData = (movie) => ({
   title: movie.title
 })
 
-# could also add some validation like 
+# could also add some validation like
 if (!movie.id || !movie.title) {
   console.error('Invalid movie data');
   return;
 }
 ```
 
-- (line 48, 56, 58) buttons should have aria-label for better accessibility for screen readers
+- [(line 48)](/src/components/Movie.jsx#L48), [(line 56)](/src/components/Movie.jsx#L56), [(line 58)](/src/components/Movie.jsx#L58) buttons should have aria-label for better accessibility for screen readers
 
-- (line 56) consider moving the button elements to separate components for better readability, maintainability and reusability
+- [(line 56)](/src/components/Movie.jsx#L56) consider moving the button elements to separate components for better readability, maintainability and reusability
 
-- (line 60)
+- [(line 60)](/src/components/Movie.jsx#L60)
   - image url should be moved to constants, and maybe even sanitized or validated
   - alt text should could also display the movie title for better accessibility
 
@@ -442,19 +482,17 @@ if (!movie.id || !movie.title) {
 
 - consider using localStorage for persistence, or even better redux-persist
 
-- (line 14) consider adding a check for `indexOfId !== -1`
+- [(line 14)](/src/data/watchLaterSlice.js#L14) consider adding a check for `indexOfId !== -1`
 
-- (line 16) typo in `remveAllWatchLater`, should be `removeAllWatchLater`
-
+- [(line 16)](/src/data/watchLaterSlice.js#L16) typo in `remveAllWatchLater`, should be `removeAllWatchLater`
 
 ## [starredSlice.js](/src/data/starredSlice.js)
 
-- (line 13) consider adding a check for `indexOfId !== -1`
+- [(line 13)](/src/data/starredSlice.js#L13) consider adding a check for `indexOfId !== -1`
 
 ## [Movies.jsx](/src/components/Movies.jsx)
 
-- (line 8) consider destructuring movies.movies one more step in father component
-
+- [(line 8)](/src/components/Movies.jsx#L8) consider destructuring movies.movies one more step in father component
 
 ## [movies.scss](/src/styles/movies.scss)
 
@@ -464,11 +502,12 @@ if (!movie.id || !movie.title) {
 
 - consider `@mixins` and `@content` for media query breakpoints and move them to `_mixins.scss`
 
-- (line 22, 23, 24, 25) just like in app.scss,no need to add vendor prefixes lines
+- [(line 22)](/src/styles/movies.scss#L22), [(line 23)](/src/styles/movies.scss#L23), [(line 24)](/src/styles/movies.scss#L24), [(line 25)](/src/styles/movies.scss#L25) just like in app.scss, no need to add vendor prefixes lines
 - Create React App uses PostCSS and autoprefixer, and package.json already has the browserslist
 - so css support for browsers is already handled
 
-- (line 247, 280) Consider creating `z-index` variables for better layer management like
+- [(line 247)](/src/styles/movies.scss#L247), [(line 280)](/src/styles/movies.scss#L280) Consider creating `z-index` variables for better layer management
+
 ```bash
 $z-layers: (
   'modal': 999,
@@ -478,43 +517,45 @@ $z-layers: (
 
 ## [Starred.jsx](/src/components/Starred.jsx)
 
-- (line 9, 10) consider destructuring starred directly, starredMovies is the only property being used
+- [(line 9)](/src/components/Starred.jsx#L9), [(line 10)](/src/components/Starred.jsx#L10) consider destructuring starred directly, starredMovies is the only property being used
 
-- (line 16 and 33) consider using ternary condition
+- [(line 16)](/src/components/Starred.jsx#L16) and [(line 33)](/src/components/Starred.jsx#L33) consider using ternary condition
+
 ```bash
 starredMovies.length > 0 ? ... : ...
 ```
 
-- (line 17) Starred Movies should be an h2, this is important for SEO and scan readers accessibility
+- [(line 17)](/src/components/Starred.jsx#L17) Starred Movies should be an h2, this is important for SEO and scan readers accessibility
 
-- (line 19) consider using a map helper to get the starred movies or maybe even `Movies.jsx`
+- [(line 19)](/src/components/Starred.jsx#L19) consider using a map helper to get the starred movies or maybe even `Movies.jsx`
 
-- (line 28) `footer` is meant for site footer content
+- [(line 28)](/src/components/Starred.jsx#L28) `footer` is meant for site footer content
 
 ## [starred.scss](/src/styles/starred.scss)
 
 - consider using variables for `font-size` values and colors for UI consistency and maintainability
 
-- (line 3) consider a class instead of `footer` for better readability and maintainability
+- [(line 3)](/src/styles/starred.scss#L3) consider a class instead of `footer` for better readability and maintainability
 
-- (line 6, 18, 23) unused class `.total-price` and `.back-button`
+- [(line 6)](/src/styles/starred.scss#L6), [(line 18)](/src/styles/starred.scss#L18), [(line 23)](/src/styles/starred.scss#L23) unused class `.total-price` and `.back-button`
 
-- (line 14) consider using a variable instead of a hardcoded value
+- [(line 14)](/src/styles/starred.scss#L14) consider using a variable instead of a hardcoded value
 
 ## [WatchLater.jsx](/src/components/WatchLater.jsx)
 
-- (line 9, 10) consider destructuring watchLater directly, watchLaterMovies is the only property being used
+- [(line 9)](/src/components/WatchLater.jsx#L9), [(line 10)](/src/components/WatchLater.jsx#L10) consider destructuring watchLater directly, watchLaterMovies is the only property being used
 
-- (line 11, 29) Typo in `remveAllWatchLater`, should be `removeAllWatchLater`. Also mentioned in watchLaterSlice file
+- [(line 11)](/src/components/WatchLater.jsx#L11), [(line 29)](/src/components/WatchLater.jsx#L29) Typo in `remveAllWatchLater`, should be `removeAllWatchLater`
 
-- (line 16 and 33) consider using ternary condition
+- [(line 16)](/src/components/WatchLater.jsx#L16) and [(line 33)](/src/components/WatchLater.jsx#L33) consider using ternary condition
+
 ```bash
 watchLaterMovies.length > 0 ? ... : ...
 ```
 
-- (line 28) footer is meant for site footer content
+- [(line 28)](/src/components/WatchLater.jsx#L28) footer is meant for site footer content
 
-- (line 33)
+- [(line 33)](/src/components/WatchLater.jsx#L33)
   - consider using a more descriptive name instead of empty-cart, maybe empty-watch-later
   - consider cerating a separate and reusable component for empty-cart
 
@@ -522,12 +563,13 @@ watchLaterMovies.length > 0 ? ... : ...
 
 - Consider using an error handler in case `ReactPlayer` fails to load
 
-- (line 5) consider moving the URL to `constants.js`
+- [(line 5)](/src/components/YoutubePlayer.jsx#L5) consider moving the URL to `constants.js`
 
 ## [App.test.js](/src/App.test.js)
 
 - test descriptions should be more descriptive and precise
-I.E: 
+  I.E:
+
 ```bash
 it('should display watch later link in navigation')
 ```
@@ -535,6 +577,7 @@ it('should display watch later link in navigation')
 - `App.test.js` should be inside test folder for structure consistency, since the rest of the tests are there
 
 - Should implement suite grouping with describe blocks, I.E:
+
 ```bash
 describe('renders components', () => {
   it('should display watch later link in navigation', ...)
@@ -544,6 +587,7 @@ describe('renders components', () => {
 ```
 
 - `renderWithProviders(<App />)` is repeated in every test, should use it in a beforeEach block
+
 ```bash
 describe('App', () => {
   beforeEach(() => {
@@ -554,6 +598,7 @@ describe('App', () => {
 ```
 
 - Some tests use `userEvent.setup()`, others don't, should standardize the approach
+
 ```bash
 let user
 beforeEach(() => {
@@ -574,31 +619,35 @@ beforeEach(() => {
 
 ## [movieSlice.test.js](/src/test/movieSlice.test.js)
 
-- (line 8) initialState
+- [(line 8)](/src/test/movieSlice.test.js#L8) initialState
   - initialState is not being used for assertions, it's just being passed to the reducer
   - initialState is repeated in every test, consider moving it to a constant outside the describe block
   - initialState should be refactored to
+
 ```bash
-    const initialState = { 
-      movies: [], 
+    const initialState = {
+      movies: [],
       fetchStatus: ''
     }
 ```
 
-- (line 12) consider testing actual state change
+- [(line 12)](/src/test/movieSlice.test.js#L12) consider testing actual state change
+
 ```bash
 const newState = moviesSlice.reducer(initialState, action)
 expect(newState.fetchStatus).toBe('loading')
 ```
 
-- (line 24) consider testingmovies and fetch status
+- [(line 24)](/src/test/movieSlice.test.js#L24) consider testing movies and fetch status
+
 ```bash
 const newState = moviesSlice.reducer(initialState, action)
 expect(newState.movies).toEqual(moviesMock)
 expect(newState.fetchStatus).toBe('success')
 ```
 
-- (line 27) consider a better approach like
+- [(line 27)](/src/test/movieSlice.test.js#L27) consider a better approach
+
 ```bash
 const newState = moviesSlice.reducer(initialState, action)
 expect(newState.fetchStatus).toBe('error')
@@ -612,18 +661,20 @@ expect(newState.fetchStatus).toBe('error')
 
 - There's no state change test
 
-- (line 19) remove commented code
+- [(line 19)](/src/test/watchLater.test.js#L19) remove commented code
 
 ## [watchLaterSlice.test.js](/src/test/watchLaterSlice.test.js)
 
-- (line 9)
+- [(line 9)](/src/test/watchLaterSlice.test.js#L9)
   - should use slice's actual initial state
   - initialState is being created multiple times, consider moving it to a constant outside the describe block
+
 ```bash
   - const initialState = watchLaterSlice.getInitialState()
 ```
 
-- (line 11) consider testing redux initialization
+- [(line 11)](/src/test/watchLaterSlice.test.js#L11) consider testing redux initialization
+
 ```bash
 # Current:
 const initialState = state
@@ -634,8 +685,8 @@ const result = watchLaterSlice.reducer(initialState, action)
 const result = watchLaterSlice.reducer(undefined, { type: '' })
 ```
 
-- (line 16) state already has `watchLaterMovies: []`
+- [(line 16)](/src/test/watchLaterSlice.test.js#L16) state already has `watchLaterMovies: []`
 
-- (line 31) `remveAllWatchLater` typo, should be `removeAllWatchLater` and fix in other locations too
+- [(line 31)](/src/test/watchLaterSlice.test.js#L31) `remveAllWatchLater` typo, should be `removeAllWatchLater` and fix in other locations too
 
-- (line 33) consider using `expect(result.watchLaterMovies).toHaveLength(0)`
+- [(line 33)](/src/test/watchLaterSlice.test.js#L33) consider using `expect(result.watchLaterMovies).toHaveLength(0)`
