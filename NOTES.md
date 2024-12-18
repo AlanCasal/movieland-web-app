@@ -1,9 +1,3 @@
-# Code Review Challenge
-
-You can find the code review challenge in [CODEREVIEW.md](/CODEREVIEW.md)
-
----
-
 ## Movieland
 
 React + Redux + RTK + Bootstrap application that fetches movies from [https://www.themoviedb.org/](https://www.themoviedb.org/)
@@ -48,6 +42,9 @@ npm start
 
 # Run Tests
 npm test
+
+# In case of error because of watchman, try
+npx react-scripts test --coverage --no-watchman
 ```
 
 ### Decisions
