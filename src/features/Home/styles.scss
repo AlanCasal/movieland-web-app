@@ -1,0 +1,14 @@
+@import '../../styles/variables';
+
+.movies-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.loading {
+	text-align: center;
+	padding: 20px;
+	font-size: 1.2rem;
+	color: $color-white;
+}

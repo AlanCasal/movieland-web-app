@@ -39,6 +39,8 @@
 		"import/ignore": ["node_modules/react-native/index\\.js$"]
 	},
 	"rules": {
+		"no-alert": "off",
+		"import/order": "off",
 		"no-restricted-exports": ["off"],
 		"react/react-in-jsx-scope": "off",
 		"no-unused-vars": "warn",
@@ -56,23 +58,6 @@
 				"endOfLine": "auto",
 				"singleQuote": true,
 				"printWidth": 80
-			}
-		],
-		"import/order": [
-			"error",
-			{
-				"groups": [
-					"builtin",
-					"external",
-					"internal",
-					"parent",
-					"sibling",
-					"index"
-				],
-				"alphabetize": {
-					"order": "asc",
-					"caseInsensitive": true
-				}
 			}
 		],
 		"react/display-name": "off",
@@ -95,8 +80,7 @@
 			}
 		],
 		"import/no-cycle": "error",
-		"quotes": ["error", "single", { "avoidEscape": true }],
-		"indent": ["error", "tab"]
+		"quotes": ["error", "single", { "avoidEscape": true }]
 	},
 	"ignorePatterns": [
 		"toDos.js",

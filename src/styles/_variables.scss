@@ -1,0 +1,27 @@
+// Colors
+$color-blue-light: #1cb5e0;
+$color-blue-dark: #050b45;
+$color-shadow: rgb(241, 241, 241);
+$color-red: #e50914;
+$color-white: #fff;
+$color-gray: #ccc;
+$color-dark-gray: #111111;
+$color-dark-blue: rgba(0, 8, 81, 0.8);
+
+// Dimensions
+$min-height-root: 850px;
+$popup-max-width: 95%;
+$video-player-height: 60vw;
+
+// Gradients
+$background-gradient: linear-gradient(
+	0deg,
+	$color-blue-light 20%,
+	$color-blue-dark 100%
+);
+
+$font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+	'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+	sans-serif;
+$font-family-code: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+	monospace;

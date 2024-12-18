@@ -1,0 +1,113 @@
+@import '../../styles/variables.scss';
+
+.header {
+	position: fixed;
+	z-index: 999;
+	width: 100%;
+	height: 3rem;
+	min-height: 50px;
+	color: $color-white;
+	background: $color-dark-blue;
+	border: 1px solid transparent;
+	border-radius: 0;
+
+	.input-group {
+		float: right;
+		width: 200px;
+		margin: 0.7rem 0 0;
+
+		@media (max-width: 720px) {
+			width: 150px;
+		}
+
+		input {
+			height: 25px;
+			font-size: 0.8rem;
+		}
+
+		.bi {
+			color: $color-white;
+		}
+
+		.search-link {
+			color: $color-dark-gray;
+			text-decoration: none;
+		}
+	}
+
+	nav {
+		position: relative;
+		float: right;
+		margin: 0.5rem 1rem 0;
+
+		a {
+			display: inline-block;
+			margin: 0 0.2rem 0;
+
+			&.nav-fav {
+				font-size: 0.8rem;
+				color: $color-gray;
+				text-decoration: none;
+
+				&:hover {
+					color: $color-white;
+				}
+			}
+		}
+	}
+
+	i {
+		margin: 0.5rem;
+		font-size: 1.2rem;
+		color: $color-white;
+
+		&:hover {
+			color: $color-white;
+		}
+
+		+ .star-number {
+			position: absolute;
+			top: 1rem;
+			right: 6.1rem;
+			padding: 0.5rem 0.3rem;
+			font-size: 0.65rem;
+			font-weight: 600;
+			color: $color-white;
+			background: $color-red;
+			border-radius: 50%;
+		}
+
+		&.bi-film {
+			float: left;
+			margin-left: 1.5rem;
+			font-size: 1.3rem;
+			color: #e9ecef;
+		}
+
+		&.bi-search {
+		}
+
+		&.bi-star-fill,
+		&.bi-heart-fill {
+			color: $color-red;
+			animation: blink 0.4s;
+
+			&.bi-star-fill-white,
+			&.bi-heart-fill-white {
+				color: $color-white;
+			}
+		}
+
+		@keyframes blink {
+			50% {
+				color: $color-red;
+			}
+		}
+	}
+
+	.selected {
+		i {
+			color: $color-white;
+		}
+	}
+}

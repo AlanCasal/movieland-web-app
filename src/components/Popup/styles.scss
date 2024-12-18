@@ -1,0 +1,26 @@
+@import '../../styles/variables';
+@import '../../styles/animations';
+
+.popup-overlay {
+	background: rgba(0, 0, 0, 0.7) !important;
+}
+
+.popup-content {
+	width: 100%;
+	max-width: 800px;
+	transition: all $animation-timing ease-in-out;
+	animation: anvil $animation-timing $animation-curve forwards;
+}
+
+.close {
+	width: 100%;
+	display: flex;
+	align-self: flex-end;
+	justify-content: flex-end;
+	margin-bottom: 10px;
+	font-size: 50px;
+	line-height: 20px;
+	color: $color-dark-gray;
+	background-color: transparent;
+	border: none;
+}
