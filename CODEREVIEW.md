@@ -34,6 +34,11 @@
 
 - Could change `App.js` to `App.jsx` since it contains JSX code and is a React component
 
+- UI: consider adding some spacing/padding/margins for small screens
+
+- Bug: on small screen sizes, when user clicks on movie card and then another movie card, these cards dissapear from the list.
+  - ..and if then clicking on `X` for closing the movie card, the show the previous movie. It's like they're stacking instead of closing the previous one, and opening a new one
+
 ## [package.json](/package.json)
 
 Consider adding suuport to IE11 if needed
