@@ -1,0 +1,14 @@
+{
+	"singleQuote": true,
+	"printWidth": 80,
+	"tabWidth": 2,
+	"trailingComma": "es5",
+	"arrowParens": "avoid",
+	"semi": true,
+	"useTabs": true,
+	"bracketSameLine": false,
+	"endOfLine": "lf",
+	"importOrder": ["^react", "^@?\\w", "^[./]"],
+	"importOrderSeparation": true,
+	"importOrderSortSpecifiers": true
+}

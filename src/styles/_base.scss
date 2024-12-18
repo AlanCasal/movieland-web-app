@@ -1,0 +1,34 @@
+@import './variables';
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	font-family: $font-family-base;
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+code {
+	font-family: $font-family-code;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+#root {
+	min-height: $min-height-root;
+	background: $background-gradient no-repeat;
+}

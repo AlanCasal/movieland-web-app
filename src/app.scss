@@ -1,44 +1,61 @@
-#root {
-  height: 100%;
-  min-height: 850px;  
-  background: linear-gradient(0deg, #1CB5E0 20%, #050b45 100%) no-repeat;
+@import './styles/variables';
+@import './styles/animations';
+
+:root,
+.app {
+	text-align: center;
 }
 
-:root, 
-.App {
-  text-align: center;
+.container {
+	padding-top: 100px;
+	color: $color-white;
 
-  @keyframes anvil {
-    0% {
-      box-shadow: 0 0 0 rgba(241, 241, 241, 0);
-      opacity: 0;
-      transform: scale(1) translateY(0px);
-    }
-    1% {
-      box-shadow: 0 0 0 rgba(241, 241, 241, 0);
-      opacity: 0;
-      transform: scale(0.96) translateY(10px);
-    }
-    100% {
-      box-shadow: 0 0 500px rgba(241, 241, 241, 0);
-      opacity: 1;
-      transform: scale(1) translateY(0px);
-    }
-  }
-  .popup-content {
-    width: auto;
-    max-width: 95%;
-    -moz-transition: anvil 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
-    -ms-transition: anvil 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
-    -o-transition: anvil 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
-    transition: anvil 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;        
-    -webkit-animation: anvil 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
-    animation: anvil 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
+	@media (max-width: 720px) {
+		padding-top: 70px;
+	}
 
-    .video-player {
-      max-width: 100%;
-      height: 60vw;
-    }
-  }
-  
+	button.close {
+		display: none;
+	}
+
+	button {
+		display: block;
+		width: 90%;
+		height: 26px;
+		margin: 8px auto;
+		font-size: 0.6rem;
+		text-align: center;
+
+		@media (max-width: 720px) {
+			height: 20px;
+			padding: 2px 2px;
+			font-size: 0.6rem;
+		}
+
+		@media (max-width: 480px) {
+			margin: 15px auto;
+			height: 35px;
+			font-size: 1rem;
+		}
+
+		&.btn-watch-later {
+			&.blue {
+				color: $color-white;
+				background-color: $color-blue-light;
+				border: $color-blue-light;
+			}
+
+			&:hover {
+				color: $color-white;
+				background: $color-blue-light;
+				border-color: $color-blue-light;
+			}
+		}
+
+		&.btn-dark:hover {
+			color: $color-white;
+			background: $color-blue-light;
+			border-color: $color-blue-light;
+		}
+	}
 }
