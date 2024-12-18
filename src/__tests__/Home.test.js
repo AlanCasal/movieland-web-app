@@ -47,10 +47,8 @@ describe('Home Component', () => {
 			expect(screen.getAllByText(moviesMock[0].title)[0]).toBeInTheDocument();
 		});
 
-		// Change search params
 		window.history.pushState({}, '', '?search=new');
 
-		// Should show loading state
 		expect(screen.getByText(/Loading more movies.../i)).toBeInTheDocument();
 	});
 
@@ -166,15 +164,12 @@ describe('Home Component', () => {
 
 		renderWithProviders(<App />);
 
-		// Wait for initial load
 		await waitFor(() => {
 			expect(screen.getAllByText(moviesMock[0].title)[0]).toBeInTheDocument();
 		});
 
-		// Clear previous calls
 		movieApi.fetchMovies.mockClear();
 
-		// Get the last movie element and trigger intersection
 		// eslint-disable-next-line testing-library/no-node-access
 		const lastMovie = screen.getByTestId('movies').lastChild;
 		const observer = new IntersectionObserver(
@@ -182,10 +177,8 @@ describe('Home Component', () => {
 		);
 		observer.observe(lastMovie);
 
-		// Advance timers for debounce
 		jest.advanceTimersByTime(300);
 
-		// Verify second page was fetched and new content is displayed
 		await waitFor(() => {
 			expect(movieApi.fetchMovies).toHaveBeenCalledTimes(1);
 		});

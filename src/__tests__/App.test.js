@@ -22,12 +22,10 @@ describe('App', () => {
 
 		expect(screen.getByTestId('movies')).toBeInTheDocument();
 
-		// Navigate to starred
 		await user.click(screen.getByTestId('nav-starred'));
 		expect(screen.getByTestId('starred')).toBeInTheDocument();
 		expect(screen.getByText(EMPTY_STARRED_MESSAGE)).toBeInTheDocument();
 
-		// Navigate to watch later
 		await user.click(screen.getByRole('link', { name: /watch later/i }));
 		expect(screen.getByText(EMPTY_WATCH_LATER_MESSAGE)).toBeInTheDocument();
 	});
